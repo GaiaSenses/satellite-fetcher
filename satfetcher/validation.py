@@ -12,8 +12,9 @@ def validate_request(req: Request, schema: dict):
             error[param] = 'missing value'
         else:
             val = req.args.get(param, type=tp)
-            if not val:
-                error[param] = 'invalid value'
+
+            if val is None:
+                error[param] = f'invalid value \'{req.args[param]}\''
             else:
                 res[param] = val
 
