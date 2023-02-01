@@ -1,4 +1,5 @@
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from . import routes
 from . import errors
@@ -6,6 +7,7 @@ from . import errors
 
 def create_app():
     app = Flask(__name__)
+    app.wsgi_app = ProxyFix(app.wsgi_app)
 
     app.register_blueprint(routes.index)
 
