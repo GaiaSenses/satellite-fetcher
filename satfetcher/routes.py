@@ -1,7 +1,5 @@
 from flask import Blueprint, request, render_template
 
-import os
-
 from .validation import validate_request
 from .satellite import sources
 from .satellite import processors
@@ -12,31 +10,32 @@ fire      = Blueprint('fire', __name__, url_prefix='/fire')
 
 index = Blueprint('', __name__)
 
-source_factory = sources.DataSourceFactory()
+src = {
+    'lightning': sources.GOESSource('GLM-L2-LCFA', maxcache=10),
+    'rainfall': sources.OWSource(),
+    'fire': sources.INPESource()
+}
 
 @lightning.get('/')
-def get():
+def get_lightning():
     args = validate_request(request, {'lat': float, 'lon': float})
-    ds = source_factory.create('lightning')
-    proc = processors.LightningProcessor(ds, **args)
+    proc = processors.LightningProcessor(src['lightning'], **args)
     return proc.process()
 
 
 @rainfall.get('/')
-def get():
+def get_rainfall():
     args = validate_request(request, {'lat': float, 'lon': float})
-    ds = source_factory.create('rainfall')
-    proc = processors.RainfallProcessor(ds, **args)
+    proc = processors.RainfallProcessor(src['rainfall'], **args)
     return proc.process()
 
 
 @fire.get('/')
-def get():
+def get_fire():
     args = validate_request(request, {'lat': float, 'lon': float})
-    ds = source_factory.create('fire')
-    proc = processors.FireProcessor(ds, **args)
+    proc = processors.FireProcessor(src['fire'], **args)
     return proc.process()
 
 @index.get('/')
-def get():
+def get_index():
     return render_template('index.html')

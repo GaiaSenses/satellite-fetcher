@@ -15,28 +15,6 @@ class DataSource(abc.ABC):
         pass
 
 
-class DataSourceFactory:
-    def __init__(self) -> None:
-        self._sources = {}
-
-    def create(self, name):
-        if name in self._sources:
-            return self._sources[name]
-
-        if name == 'lightning':
-            src = GOESSource('GLM-L2-LCFA')
-        elif name == 'rainfall':
-            src = OWSource()
-        elif name == 'fire':
-            src = INPESource()
-        else:
-            raise ValueError(
-                f"{name} must be one of ['lightning', 'fire', 'rain']")
-
-        self._sources[name] = src
-        return src
-
-
 class GOESResponse:
     def __init__(self, key, date, body):
         self.key = key
