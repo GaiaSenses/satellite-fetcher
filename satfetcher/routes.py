@@ -39,4 +39,4 @@ def get():
 
 @index.get('/')
 def get():
-    return render_template('index.html', port=os.getenv('PORT'))
+    return render_template('index.html')
