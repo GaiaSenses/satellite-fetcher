@@ -30,9 +30,9 @@ window.onload = () => {
 
     const params = { lat, lon }
     fetch(`/${dataSource}?${new URLSearchParams(params)}`)
-      .then((res) => res.text())
+      .then((res) => res.json())
       .then((data) => {
-        resultContainer.innerText = data;
+        resultContainer.innerText = JSON.stringify(data, null, 2);
       });
   }
 
