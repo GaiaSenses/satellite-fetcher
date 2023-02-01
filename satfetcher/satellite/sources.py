@@ -77,7 +77,7 @@ class GOESSource(DataSource):
 
 
 class INPESource(DataSource):
-    API_URL = 'http://queimadas.dgi.inpe.br/api'
+    API_URL = 'https://queimadas.dgi.inpe.br/api'
     COUNTRY = 33  # Brasil
 
     def __init__(self, cache_timeout=600):
