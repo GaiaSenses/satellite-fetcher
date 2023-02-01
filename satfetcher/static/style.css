@@ -1,0 +1,75 @@
+* {
+    --white-base: #fff;
+    --black-base: #000;
+    --blue-base: #14073a;
+    --blue-ocean: #478ea5;
+    --blue-light: #f1f4f6;
+    --green-light: #f0fff0;
+    --gray-light: #f0f0ff;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    margin: 0 auto;
+    background-color: var(--white-base);
+}
+
+h1 {
+    margin: 0 0 100px 0;
+    padding: 50px 0 20px 0;
+    text-align: center;
+    background-color: var(--blue-light);
+}
+
+form {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+}
+
+.column-flow {
+    flex-flow: column;
+}
+
+.input-field {
+    margin: 5px;
+}
+
+input[type="submit"] {
+    align-self: center;
+    width: fit-content;
+}
+
+#result {
+    font-family: monospace;
+    margin: 10px auto;
+    padding: 10px;
+    width: 50%;
+    min-height: 2em;
+    background-color: var(--green-light);
+    border-radius: 10px;
+    border: 1px dashed var(--blue-ocean);
+    overflow: auto;
+}
+
+#copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 26%;
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.copy-icon {
+    background: no-repeat url("/static/copy-icon.svg");
+    cursor: pointer;
+}
+
+.copy-success {
+    background: no-repeat url("/static/check-icon.svg");
+}

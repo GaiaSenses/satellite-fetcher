@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt_BR">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Satellite Fetcher</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+        <script type="text/javascript">
+         const BASEURL = 'http://localhost:{{ port }}';
+        </script>
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </head>
+    <body>
+        <h1>Acesso aos dados do GaiaSenses</h1>
+        <form class="flex column-flow">
+            <div id="input-fields-container" class="flex">
+                <div class="input-field">
+                    <label for="data-source-select">Fonte: </label>
+                    <select id="data-source-select" name="data-source" value="data-source">
+                        <option value="rainfall">Chuva</option>
+                        <option value="fire">Focos de Incêndio</option>
+                        <option value="lightning">Raios</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="latitude">Latitude: </label>
+                    <input type="text" id="latitude" name="latitude" />
+                </div>
+                <div class="input-field">
+                    <label for="longitude">Longitude: </label>
+                    <input type="text" id="longitude" name="longitude" />
+                </div>
+            </div>
+            <input type="submit" value="Enviar" />
+        </form>
+        <div style="position: relative;">
+            <pre id="result"></pre>
+            <div id="copy-btn" class="copy-icon" title="copy"></div>
+        </div>
+    </body>
+</html>

@@ -7,6 +7,8 @@ from . import errors
 def create_app():
     app = Flask(__name__)
 
+    app.register_blueprint(routes.index)
+
     app.register_blueprint(routes.lightning)
     app.register_blueprint(routes.rainfall)
     app.register_blueprint(routes.fire)
