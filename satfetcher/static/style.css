@@ -31,6 +31,21 @@ form {
     justify-content: center;
 }
 
+@media (max-width: 650px) {
+    #input-fields-container {
+        flex-flow: column;
+    }
+
+    .input-field {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .input-field label, .input-field input {
+        width: 50%;
+    }
+}
+
 .column-flow {
     flex-flow: column;
 }
