@@ -3,6 +3,9 @@ from netCDF4 import Dataset
 from . import utils
 from . import sources
 
+# distance in metres
+LIGHTNING_MAX_DIST = 50000
+FIRE_MAX_DIST = 50000
 
 class Processor:
     def __init__(self, source: sources.DataSource, lat: float, lon: float):
@@ -43,14 +46,15 @@ class LightningProcessor(Processor):
             lats = ds.variables['flash_lat'][:]
             lons = ds.variables['flash_lon'][:]
 
-            for (lat, lon) in zip(lats, lons):
-                d = utils.distance([self.lat, self.lon], [lat, lon])
-                if d <= 10000.0:
-                    out.append({
-                        'lat': float(lat),
-                        'lon': float(lon),
-                        'dist': round(d, 2)
-                    })
+            distances = utils.distance([lats, lons], [self.lat, self.lon])
+            dist_mask = distances <= LIGHTNING_MAX_DIST
+
+            for dist, lat, lon in zip(distances[dist_mask], lats[dist_mask], lons[dist_mask]):
+                out.append({
+                    'lat': float(lat),
+                    'lon': float(lon),
+                    'dist': round(float(dist), 2)
+                })
 
             ds.close()
 
@@ -71,7 +75,7 @@ class FireProcessor(Processor):
             fire = [props['latitude'], props['longitude']]
 
             d = utils.distance(orig, fire)
-            if d <= 50000.0:
+            if d <= FIRE_MAX_DIST:
                 out.append({
                     'lat': fire[0],
                     'lon': fire[1],
