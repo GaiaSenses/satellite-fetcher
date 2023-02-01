@@ -29,7 +29,7 @@ window.onload = () => {
     resultContainer.innerText = 'carregando...';
 
     const params = { lat, lon }
-    fetch(`/${dataSource}?${new URLSearchParams(params)}`)
+    fetch(`${location.origin}/${dataSource}?${new URLSearchParams(params)}`)
       .then((res) => res.json())
       .then((data) => {
         resultContainer.innerText = JSON.stringify(data, null, 2);
