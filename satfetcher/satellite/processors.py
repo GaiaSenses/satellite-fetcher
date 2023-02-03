@@ -23,11 +23,27 @@ class RainfallProcessor(Processor):
 
     def process(self):
         data = self.source.get(lat=self.lat, lon=self.lon)
+
+        def map_weather(weather: list):
+            def fn(w):
+                return { 'main': w['main'], 'description': w['description'] }
+            return map(fn, weather)
+
+        def filter_main(main: dict):
+            def fn(m):
+                k, _ = m
+                return k not in ['temp_min', 'temp_max', 'sea_level']
+            return filter(fn, main.items())
+
         out = {
             'lat': data.body['coord']['lat'],
             'lon': data.body['coord']['lon'],
             'rain': data.body.get('rain', {}),
-            'wind': data.body.get('wind', {})
+            'wind': data.body.get('wind', {}),
+            'main': dict(filter_main(data.body['main'])),
+            'weather': list(map_weather(data.body['weather'])),
+            'clouds': data.body['clouds']['all'],
+            'visibility': data.body['visibility']
         }
         return out
 
