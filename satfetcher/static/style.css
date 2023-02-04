@@ -31,27 +31,21 @@ form {
     justify-content: center;
 }
 
-@media (max-width: 650px) {
-    #input-fields-container {
-        flex-flow: column;
-    }
-
-    .input-field {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .input-field label, .input-field input {
-        width: 50%;
-    }
-}
-
 .column-flow {
     flex-flow: column;
 }
 
 .input-field {
     margin: 5px;
+}
+
+div.input-field {
+    display: flex;
+    flex-flow: column;
+}
+
+div.input-field select {
+    width: fit-content;
 }
 
 input[type="submit"] {
@@ -102,4 +96,18 @@ input[type="submit"] {
 
 .copy-success {
     background: no-repeat url("/static/check-icon.svg");
+}
+
+@media (max-width: 750px) {
+    #input-fields-container {
+        flex-flow: column;
+    }
+
+    div.input-field {
+        flex-flow: row;
+    }
+
+    div.input-field label, div.input-field input, div.input-field select {
+        width: 50%;
+    }
 }

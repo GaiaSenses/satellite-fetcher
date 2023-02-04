@@ -1,8 +1,8 @@
 import math
 import numpy as np
 
-# WGS84 equatorial radius, in meters
-EARTH_RADIUS = 6378137.0
+# WGS84 equatorial radius, in km
+EARTH_RADIUS = 6378.137
 
 def sign(x):
     if type(x) != np.ndarray:

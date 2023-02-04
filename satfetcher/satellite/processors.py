@@ -46,7 +46,7 @@ class RainfallProcessor(Processor):
 
 
 class LightningProcessor(Processor):
-    def __init__(self, source: sources.DataSource, dist: float = 50000.0, *args, **kwargs):
+    def __init__(self, source: sources.DataSource, dist: float = 50.0, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.dist = dist
 
@@ -76,7 +76,7 @@ class LightningProcessor(Processor):
 
 
 class FireProcessor(Processor):
-    def __init__(self, source: sources.DataSource, dist: float = 50000.0, *args, **kwargs):
+    def __init__(self, source: sources.DataSource, dist: float = 50.0, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.dist = dist
 
