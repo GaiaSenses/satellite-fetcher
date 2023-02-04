@@ -3,9 +3,6 @@ from netCDF4 import Dataset
 from . import utils
 from . import sources
 
-# distance in metres
-LIGHTNING_MAX_DIST = 50000
-FIRE_MAX_DIST = 50000
 
 class Processor:
     def __init__(self, source: sources.DataSource, lat: float, lon: float):
@@ -18,8 +15,8 @@ class Processor:
 
 
 class RainfallProcessor(Processor):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, source: sources.DataSource, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
 
     def process(self):
         data = self.source.get(lat=self.lat, lon=self.lon)
@@ -49,8 +46,9 @@ class RainfallProcessor(Processor):
 
 
 class LightningProcessor(Processor):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, source: sources.DataSource, dist: float = 50000.0, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
+        self.dist = dist
 
     def process(self):
         samples = self.source.get(n=3)
@@ -63,7 +61,7 @@ class LightningProcessor(Processor):
             lons = ds.variables['flash_lon'][:]
 
             distances = utils.distance([lats, lons], [self.lat, self.lon])
-            dist_mask = distances <= LIGHTNING_MAX_DIST
+            dist_mask = distances <= self.dist
 
             for dist, lat, lon in zip(distances[dist_mask], lats[dist_mask], lons[dist_mask]):
                 out.append({
@@ -78,8 +76,9 @@ class LightningProcessor(Processor):
 
 
 class FireProcessor(Processor):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, source: sources.DataSource, dist: float = 50000.0, *args, **kwargs):
+        super().__init__(source, *args, **kwargs)
+        self.dist = dist
 
     def process(self):
         samples = self.source.get()
@@ -91,7 +90,7 @@ class FireProcessor(Processor):
             fire = [props['latitude'], props['longitude']]
 
             d = utils.distance(orig, fire)
-            if d <= FIRE_MAX_DIST:
+            if d <= self.dist:
                 out.append({
                     'lat': fire[0],
                     'lon': fire[1],

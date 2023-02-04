@@ -13,7 +13,7 @@
 
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
-        <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <script src="{{ url_for('static', filename='main.js') }}" defer></script>
     </head>
     <body>
         <h1>Acesso aos dados do GaiaSenses</h1>
@@ -35,8 +35,11 @@
                     <label for="longitude">Longitude: </label>
                     <input type="text" id="longitude" name="longitude" />
                 </div>
+                <div class="input-field"></div>
             </div>
-            <input type="submit" value="Enviar" />
+            <div id="buttons-container" class="flex">
+                <input type="submit" value="Enviar" />
+            </div>
         </form>
         <div id="result-container">
             <pre id="result"></pre>

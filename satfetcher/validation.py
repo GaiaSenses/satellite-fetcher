@@ -2,21 +2,33 @@ from flask import Request
 
 from .errors import ValidationError
 
+def is_optional(x):
+    try:
+        return x['optional']
+    except:
+        return False
+
+def conversion_fn(x):
+    try:
+        return x['type']
+    except:
+        return x
 
 def validate_request(req: Request, schema: dict):
     error = {}
     res = {}
 
-    for param, tp in schema.items():
+    for param, val in schema.items():
         if param not in req.args:
-            error[param] = 'missing value'
+            if not is_optional(val):
+                error[param] = 'missing value'
         else:
-            val = req.args.get(param, type=tp)
+            arg = req.args.get(param, type=conversion_fn(val))
 
-            if val is None:
+            if arg is None:
                 error[param] = f'invalid value \'{req.args[param]}\''
             else:
-                res[param] = val
+                res[param] = arg
 
     if error:
         raise ValidationError(error)
