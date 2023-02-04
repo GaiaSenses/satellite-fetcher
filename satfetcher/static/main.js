@@ -72,7 +72,7 @@ window.onload = () => {
 
     const label = document.createElement('label');
     label.setAttribute('for', 'distance');
-    label.textContent = 'Distância Limite';
+    label.textContent = 'Distância Limite: ';
 
     const input = document.createElement('input');
     input.type = 'text';
