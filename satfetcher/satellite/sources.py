@@ -100,7 +100,7 @@ class INPESource(DataSource):
 
 
 class OWSource(DataSource):
-    API_URL = 'https://api.openweathermap.org/data/2.5/weather?appid={key}&lat={lat}&lon={lon}&units=metric'
+    API_URL = 'https://api.openweathermap.org/data/2.5/weather?appid={key}&lat={lat}&lon={lon}&units=metric&lang=pt_br'
     API_KEY = os.getenv('OPENWEATHER_API_KEY')
 
     def __init__(self):
