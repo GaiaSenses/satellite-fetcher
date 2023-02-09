@@ -52,7 +52,7 @@ class LightningProcessor(Processor):
 
     def process(self):
         samples = self.source.get(n=3)
-        out = []
+        out = { 'count': 0, 'events': [] }
 
         for sample in samples:
             ds = Dataset('in-memory.nc', memory=sample.body)
@@ -64,7 +64,7 @@ class LightningProcessor(Processor):
             dist_mask = distances <= self.dist
 
             for dist, lat, lon in zip(distances[dist_mask], lats[dist_mask], lons[dist_mask]):
-                out.append({
+                out['events'].append({
                     'lat': float(lat),
                     'lon': float(lon),
                     'dist': round(float(dist), 2)
@@ -72,6 +72,7 @@ class LightningProcessor(Processor):
 
             ds.close()
 
+        out['count'] = len(out['events'])
         return out
 
 
@@ -82,7 +83,7 @@ class FireProcessor(Processor):
 
     def process(self):
         samples = self.source.get()
-        out = []
+        out = { 'count': 0, 'events': [] }
 
         for sample in samples.body:
             props = sample['properties']
@@ -91,7 +92,7 @@ class FireProcessor(Processor):
 
             d = utils.distance(orig, fire)
             if d <= self.dist:
-                out.append({
+                out['events'].append({
                     'lat': fire[0],
                     'lon': fire[1],
                     'dist': round(d, 2),
@@ -99,4 +100,5 @@ class FireProcessor(Processor):
                     'state': props['estado']
                 })
 
+        out['count'] = len(out['events'])
         return out
