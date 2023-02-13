@@ -23,7 +23,7 @@ class RainfallProcessor(Processor):
 
         def map_weather(weather: list):
             def fn(w):
-                return { 'main': w['main'], 'description': w['description'] }
+                return { 'main': w['main'], 'description': w['description'], 'icon': w['icon'] }
             return map(fn, weather)
 
         def filter_main(main: dict):
