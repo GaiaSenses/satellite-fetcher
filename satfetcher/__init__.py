@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .routes import fire, lightning, rainfall, index
@@ -8,6 +9,7 @@ from . import errors
 def create_app():
     app = Flask(__name__)
     app.wsgi_app = ProxyFix(app.wsgi_app)
+    CORS(app)
 
     app.register_blueprint(index.blueprint)
 
