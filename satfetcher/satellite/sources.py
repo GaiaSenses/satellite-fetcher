@@ -109,3 +109,6 @@ class OWSource(DataSource):
     def get(self, lat, lon, *args, **kwargs):
         with urlopen(self.API_URL.format(key=self.API_KEY, lat=lat, lon=lon)) as res:
             return JSONResponse(json.load(res))
+
+class OWGeocodingSource(OWSource):
+    API_URL = 'https://api.openweathermap.org/geo/1.0/reverse?appid={key}&lat={lat}&lon={lon}&limit=1'
