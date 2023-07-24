@@ -67,6 +67,7 @@ class GOESSource(DataSource):
             prefix = self._prefix(dt)
             objects = list(self._bucket.objects.filter(Prefix=prefix))
             res += objects[(len(res) - n):]
+            h += 1
         return res
 
     def _prefix(self, utc: datetime):
