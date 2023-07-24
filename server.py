@@ -1,15 +1,14 @@
 import os
 import logging
 
-from dotenv import load_dotenv
-
 from satfetcher import create_app
-
-load_dotenv()
 
 app = create_app()
 
 if __name__ == '__main__':
+    from dotenv import load_dotenv
+    load_dotenv()
+
     app.run(port=os.getenv('PORT', 8080),
             host='0.0.0.0',
             debug=os.getenv('DEBUG'))
