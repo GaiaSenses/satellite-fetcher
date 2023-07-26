@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from .routes import fire, lightning, rainfall, index
+from .routes import index, fire, lightning, rainfall, brightness
 from . import errors
 
 
@@ -16,6 +16,7 @@ def create_app():
     app.register_blueprint(lightning.blueprint)
     app.register_blueprint(rainfall.blueprint)
     app.register_blueprint(fire.blueprint)
+    app.register_blueprint(brightness.blueprint)
 
     app.register_error_handler(
         errors.ValidationError, errors.handle_validation_error)

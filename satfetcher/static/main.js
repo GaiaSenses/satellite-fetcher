@@ -119,13 +119,15 @@ window.onload = () => {
     });
   }
 
+  const needDistanceContainer = (item) => !['rainfall', 'brightness'].includes(item);
+
   function handleSelect(e) {
     const item = e.target.selectedOptions[0].value;
 
-    if (item !== 'rainfall' && !distanceContainer.parentNode) {
+    if (needDistanceContainer(item) && !distanceContainer.parentNode) {
       fieldsContainer.appendChild(distanceContainer);
     }
-    else if (item === 'rainfall' && distanceContainer.parentNode) {
+    else if (!needDistanceContainer(item) && distanceContainer.parentNode) {
       fieldsContainer.removeChild(distanceContainer);
     }
   }
@@ -136,9 +138,9 @@ window.onload = () => {
     container.prepend(btn);
   }
 
-  if (select.selectedOptions[0].value !== 'rainfall') {
+  /* if (select.selectedOptions[0].value !== 'rainfall') {
     fieldsContainer.appendChild(distanceContainer);
-  }
+  } */
 
   form.addEventListener('submit', handleSubmit);
   copyBtn.addEventListener('click', handleCopy);

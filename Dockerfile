@@ -11,4 +11,4 @@ ARG PORT=8080
 ENV PORT=${PORT}
 
 EXPOSE $PORT
-CMD gunicorn -b :${PORT} server:app
+CMD gunicorn -b :${PORT} -t 200 server:app
