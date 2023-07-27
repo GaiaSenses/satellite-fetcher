@@ -1,23 +1,28 @@
 # Satellite Fetcher
 
-## Setup
-1. Instale Python 3.11
+## Setup 1
+1. Instale o gerenciador de pacotes `conda`. Para uma instalação mais rápida e mínima, use o instalador [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
-2. Crie um virtual environment
+2. Crie um ambiente isolado para o projeto:
 ```console
-$ pip install pipx
-
-$ pipx install virtualenv
-
-$ virtualenv venv
+$ conda create --name satfetcher python=3.11 pip
 ```
 
-3. Instale dependências
+3. Ative o ambiente:
 ```console
-$ pip install -r requirements.txt
+$ conda activate satfetcher
+
+(satfetcher) $ # o prompt mudará de acordo com o nome do ambiente
 ```
 
-4. Crie arquivo `.env` e defina as variáveis de ambiente
+4. Instale dependências:
+```console
+(satfetcher) $ conda install gdal
+
+(satfetcher) $ pip install -r requirements.txt
+```
+
+5. Crie arquivo `.env` e defina as variáveis de ambiente:
 ```console
 $ cp .env.example .env
 ```
