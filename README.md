@@ -1,6 +1,6 @@
 # Satellite Fetcher
 
-## Setup 1
+## Setup
 1. Instale o gerenciador de pacotes `conda`. Para uma instalação mais rápida e mínima, use o instalador [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 2. Crie um ambiente isolado para o projeto:
@@ -27,7 +27,7 @@ $ conda activate satfetcher
 $ cp .env.example .env
 ```
 
-5. Execute o servidor
+6. Execute o servidor
 ```console
 $ python server.py
 ```
