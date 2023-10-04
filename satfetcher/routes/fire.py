@@ -1,12 +1,12 @@
 from flask import Blueprint, request
 
 from ..satellite.processors import FireProcessor
-from ..satellite.sources import INPESource
+from ..satellite.sources import FIRMSSource
 from ..validation import validate_request
 
 blueprint = Blueprint('fire', __name__, url_prefix='/fire')
 
-source = INPESource()
+source = FIRMSSource()
 schema = {
     'lat': float,
     'lon': float,

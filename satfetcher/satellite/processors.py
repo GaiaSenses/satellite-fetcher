@@ -107,19 +107,17 @@ class FireProcessor(Processor):
             'state': location['state'],
         }
 
-        for sample in samples.body:
-            props = sample['properties']
+        for _, sample in samples.body.iterrows():
             orig = [self.lat, self.lon]
-            fire = [props['latitude'], props['longitude']]
+            fire = [sample['latitude'], sample['longitude']]
+            confidence = sample['confidence']
 
             d = utils.distance(orig, fire)
-            if d <= self.dist:
+            if confidence != 'l' and d <= self.dist:
                 out['events'].append({
                     'lat': fire[0],
                     'lon': fire[1],
                     'dist': round(d, 2),
-                    'city': props['municipio'],
-                    'state': props['estado']
                 })
 
         out['count'] = len(out['events'])

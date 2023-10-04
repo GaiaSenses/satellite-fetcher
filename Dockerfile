@@ -3,7 +3,7 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN conda install --yes python=3.11 pip gdal
+RUN conda install --yes python=3.11 pip gdal pandas
 RUN pip install -r requirements.txt --no-cache-dir
 
 COPY . .

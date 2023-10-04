@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from urllib.request import urlopen
 
 import boto3
+import pandas as pd
 from botocore import UNSIGNED
 from botocore.config import Config
 
@@ -26,6 +27,9 @@ class JSONResponse:
     def __init__(self, body):
         self.body = body
 
+class CSVResponse:
+    def __init__(self, body):
+        self.body = body
 
 class GOESSource(DataSource):
     def __init__(self, product, maxcache=3):
@@ -77,25 +81,25 @@ class GOESSource(DataSource):
         return f'{self._product}/{year}/{day}/{hour}'
 
 
-class INPESource(DataSource):
-    API_URL = 'https://queimadas.dgi.inpe.br/api'
-    COUNTRY = 33  # Brasil
+class FIRMSSource(DataSource):
+    API_URL = 'https://firms.modaps.eosdis.nasa.gov/api/country/csv/{key}/VIIRS_NOAA20_NRT/BRA/1'
+    API_KEY = os.getenv('FIRMS_API_KEY')
 
     def __init__(self, cache_timeout=600):
         super().__init__()
         self._cache = None
         self._timeout = timedelta(seconds=cache_timeout)
 
-    def get(self, *args, **kwargs):
+    def get(self):
         if self._cache:
             now = datetime.now()
             if now - self._cache['time'] < self._timeout:
                 return self._cache['response']
 
-        with urlopen(f'{self.API_URL}/focos?pais_id={self.COUNTRY}') as res:
+        with urlopen(self.API_URL.format(key=self.API_KEY)) as res:
             self._cache = {
                 'time': datetime.now(),
-                'response': JSONResponse(json.load(res))
+                'response': CSVResponse(pd.read_csv(res))
             }
             return self._cache['response']
 
