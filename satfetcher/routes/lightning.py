@@ -1,23 +1,20 @@
 from flask import Blueprint, request
+from pydantic import ValidationError
+
+from ..models.lightning import LightningQueryParams
 
 from ..satellite.processors import LightningProcessor
 from ..satellite.sources import GOESSource
-from ..validation import validate_request
 
 blueprint = Blueprint('lightning', __name__, url_prefix='/lightning')
 
 source = GOESSource('GLM-L2-LCFA', maxcache=10)
-schema = {
-    'lat': float,
-    'lon': float,
-    'dist': {
-        'type': float,
-        'optional': True
-    }
-}
 
 @blueprint.get('/')
 def get():
-    args = validate_request(request, schema)
-    proc = LightningProcessor(source, **args)
-    return proc.process()
+    try:
+        params = LightningQueryParams(**request.args)
+        proc = LightningProcessor(source, **params.model_dump())
+        return proc.process().model_dump(by_alias=True)
+    except ValidationError as e:
+        return e.json(include_url=False), 400

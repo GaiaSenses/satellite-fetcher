@@ -1,6 +1,12 @@
 from netCDF4 import Dataset
 from osgeo import gdal, osr
-from satfetcher.satellite import sources
+
+from ..models.brightness import BrightnessResponse
+from ..models.fire import FireResponse
+from ..models.lightning import LightningResponse
+from ..models.rainfall import RainfallResponse
+
+from . import sources
 
 from . import utils
 from . import sources
@@ -43,8 +49,8 @@ class RainfallProcessor(Processor):
         out = {
             'lat': data.body['coord']['lat'],
             'lon': data.body['coord']['lon'],
-            'rain': data.body.get('rain', {}),
-            'wind': data.body.get('wind', {}),
+            'rain': data.body.get('rain', None),
+            'wind': data.body.get('wind', None),
             'main': dict(filter_main(data.body['main'])),
             'weather': list(map_weather(data.body['weather'])),
             'clouds': data.body['clouds']['all'],
@@ -52,11 +58,11 @@ class RainfallProcessor(Processor):
             'city': location['name'],
             'state': location['state'],
         }
-        return out
+        return RainfallResponse(**out)
 
 
 class LightningProcessor(Processor):
-    def __init__(self, source: sources.DataSource, dist: float = 50.0, *args, **kwargs):
+    def __init__(self, source: sources.DataSource, dist: float, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.dist = dist
 
@@ -89,11 +95,11 @@ class LightningProcessor(Processor):
             ds.close()
 
         out['count'] = len(out['events'])
-        return out
+        return LightningResponse(**out)
 
 
 class FireProcessor(Processor):
-    def __init__(self, source: sources.DataSource, dist: float = 50.0, *args, **kwargs):
+    def __init__(self, source: sources.DataSource, dist: float, *args, **kwargs):
         super().__init__(source, *args, **kwargs)
         self.dist = dist
 
@@ -121,7 +127,7 @@ class FireProcessor(Processor):
                 })
 
         out['count'] = len(out['events'])
-        return out
+        return FireResponse(**out)
 
 
 class BrightnessTemperatureProcessor(Processor):
@@ -136,11 +142,12 @@ class BrightnessTemperatureProcessor(Processor):
         for sample in samples:
             temp_sum += self._temperature(sample.body)
 
-        return {
+        out = {
             'temp': round(temp_sum / len(samples), 2),
             'city': location['name'],
             'state': location['state']
         }
+        return BrightnessResponse(**out)
 
     def _temperature(self, data):
         # Min lon, Min lat, Max lon, Max lat (values for Brazil)
