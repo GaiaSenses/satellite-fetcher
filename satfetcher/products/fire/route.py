@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from pydantic import ValidationError
 
-from ..models.fire import FireQueryParams
+from .model import FireQueryParams
+from .processor import FireProcessor
 
-from ..satellite.processors import FireProcessor
-from ..satellite.sources import FIRMSSource
+from ..sources import FIRMSSource
 
 blueprint = Blueprint('fire', __name__, url_prefix='/fire')
 

@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from pydantic import ValidationError
 
-from ..models.lightning import LightningQueryParams
+from .model import LightningQueryParams
+from .processor import LightningProcessor
 
-from ..satellite.processors import LightningProcessor
-from ..satellite.sources import GOESSource
+from ..sources import GOESSource
 
 blueprint = Blueprint('lightning', __name__, url_prefix='/lightning')
 

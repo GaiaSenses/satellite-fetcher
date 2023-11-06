@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from pydantic import ValidationError
 
-from ..models.brightness import BrightnessQueryParams
+from .model import BrightnessQueryParams
+from .processor import BrightnessTemperatureProcessor
 
-from ..satellite.processors import BrightnessTemperatureProcessor
-from ..satellite.sources import GOESSource
+from ..sources import GOESSource
 
 blueprint = Blueprint('brightness', __name__, url_prefix='/brightness')
 

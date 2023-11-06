@@ -2,7 +2,12 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from .routes import index, fire, lightning, rainfall, brightness
+from .products.rainfall import route as rainfall
+from .products.lightning import route as lightning
+from .products.fire import route as fire
+from .products.brightness import route as brightness
+
+from . import index
 from . import errors
 
 

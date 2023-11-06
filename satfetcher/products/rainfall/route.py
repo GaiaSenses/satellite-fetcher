@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from pydantic import ValidationError
 
-from ..models.rainfall import RainfallQueryParams
+from .model import RainfallQueryParams
+from .processor import RainfallProcessor
 
-from ..satellite.processors import RainfallProcessor
-from ..satellite.sources import OWSource
+from ..sources import OWSource
 
 blueprint = Blueprint('rainfall', __name__, url_prefix='/rainfall')
 
