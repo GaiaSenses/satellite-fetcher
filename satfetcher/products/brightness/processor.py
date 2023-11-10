@@ -11,20 +11,45 @@ class BrightnessTemperatureProcessor(Processor):
 
     def process(self):
         location = self.get_location()
-        samples = self.source.get(n=5)
-        temp_sum = 0
+        temp = 0
 
-        for sample in samples:
-            temp_sum += self._temperature(sample.body)
+        cached = self._getcache()
+        if cached is not None:
+            buf, transform = cached
+            x, y = self._coord2idx([self.lat, self.lon], transform)
+            temp = buf[y, x]
+        else:
+            sample = self.source.get(n=1)[0]
+
+            buf, transform = self._reproject(sample.body)
+            x, y = self._coord2idx([self.lat, self.lon], transform)
+
+            # Cache results
+            self._savecache(buf, transform)
+
+            temp = buf[y, x]
 
         out = {
-            'temp': round(temp_sum / len(samples), 2),
+            'temp': round(temp, 2),
             'city': location['name'],
             'state': location['state']
         }
         return BrightnessResponse(**out)
 
-    def _temperature(self, data):
+    def _savecache(self, data, transform):
+        expire = 30 * 60 # 30min
+        self.cache.npset('brightness:buf', data, expire)
+        self.cache.npset('brightness:transform', transform, expire)
+
+    def _getcache(self):
+        buf = self.cache.npget('brightness:buf')
+        transform = self.cache.npget('brightness:transform')
+        if buf is not None and transform is not None:
+            return buf, transform
+        else:
+            return None
+
+    def _reproject(self, data):
         # Min lon, Min lat, Max lon, Max lat (values for Brazil)
         extent = [-74.0, -33, -34, 0.5]
         var = 'CMI'
@@ -85,14 +110,14 @@ class BrightnessTemperatureProcessor(Processor):
 
         # Get geotransform
         transform = sat_data.GetGeoTransform()
-        x = int((self.lon - transform[0]) / transform[1])
-        y = int((transform[3] - self.lat) / -transform[5])
-
-        # Get brightness temperature
-        temp = sat_array[y,x]
 
         # Delete in-memory files
         gdal.Unlink('/vsimem/file.nc')
         gdal.Unlink('/vsimem/fileret.nc')
 
-        return temp
+        return sat_array, transform
+
+    def _coord2idx(self, coord, transform):
+        x = int((coord[1] - transform[0]) / transform[1])
+        y = int((transform[3] - coord[0]) / -transform[5])
+        return x, y
