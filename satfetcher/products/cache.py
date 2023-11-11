@@ -4,9 +4,10 @@ import json
 import os
 import io
 
-_redis = redis.Redis(host=os.getenv('REDIS_HOST'),
-                     port=int(os.getenv('REDIS_PORT')),
-                     password=os.getenv('REDIS_PASSWORD'),
+_redis = redis.Redis(host=os.getenv('REDISHOST'),
+                     port=int(os.getenv('REDISPORT')),
+                     username=os.getenv('REDISUSER'),
+                     password=os.getenv('REDISPASSWORD'),
                      decode_responses=False)
 
 class Cache:
