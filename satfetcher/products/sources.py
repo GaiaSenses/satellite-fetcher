@@ -32,7 +32,7 @@ class CSVResponse:
         self.body = body
 
 class GOESSource(DataSource):
-    def __init__(self, product, maxcache=3):
+    def __init__(self, product):
         super().__init__()
 
         self._s3 = boto3.resource(
@@ -40,26 +40,15 @@ class GOESSource(DataSource):
         self._bucket = self._s3.Bucket('noaa-goes16')
         self._product = product
 
-        self._cache = {}
-        self._maxcache = maxcache
-
     def get(self, n=1, *args, **kwargs):
         latest = self._nlatest(n)
         res = []
         for resource in latest:
-            if resource.key in self._cache:
-                res.append(self._cache[resource.key])
-            else:
-                obj = resource.get()
-                response = GOESResponse(
-                    resource.key, resource.last_modified, obj['Body'].read())
+            obj = resource.get()
+            response = GOESResponse(
+                resource.key, resource.last_modified, obj['Body'].read())
 
-                self._cache[response.key] = response
-                if len(self._cache) > self._maxcache:
-                    keys = sorted(self._cache.keys())
-                    del self._cache[keys[0]]
-
-                res.append(response)
+            res.append(response)
 
         return res
 
@@ -85,23 +74,12 @@ class FIRMSSource(DataSource):
     API_URL = 'https://firms.modaps.eosdis.nasa.gov/api/country/csv/{key}/VIIRS_NOAA20_NRT/BRA/1'
     API_KEY = os.getenv('FIRMS_API_KEY')
 
-    def __init__(self, cache_timeout=600):
+    def __init__(self):
         super().__init__()
-        self._cache = None
-        self._timeout = timedelta(seconds=cache_timeout)
 
     def get(self):
-        if self._cache:
-            now = datetime.now()
-            if now - self._cache['time'] < self._timeout:
-                return self._cache['response']
-
         with urlopen(self.API_URL.format(key=self.API_KEY)) as res:
-            self._cache = {
-                'time': datetime.now(),
-                'response': CSVResponse(pd.read_csv(res))
-            }
-            return self._cache['response']
+            return CSVResponse(pd.read_csv(res))
 
 
 class OWSource(DataSource):

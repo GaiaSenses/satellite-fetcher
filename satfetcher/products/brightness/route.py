@@ -8,7 +8,7 @@ from ..sources import GOESSource
 
 blueprint = Blueprint('brightness', __name__, url_prefix='/brightness')
 
-source = GOESSource('ABI-L2-CMIPF', maxcache=10)
+source = GOESSource('ABI-L2-CMIPF')
 
 @blueprint.get('/')
 def get():

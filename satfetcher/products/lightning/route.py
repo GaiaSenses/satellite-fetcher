@@ -8,7 +8,7 @@ from ..sources import GOESSource
 
 blueprint = Blueprint('lightning', __name__, url_prefix='/lightning')
 
-source = GOESSource('GLM-L2-LCFA', maxcache=10)
+source = GOESSource('GLM-L2-LCFA')
 
 @blueprint.get('/')
 def get():
