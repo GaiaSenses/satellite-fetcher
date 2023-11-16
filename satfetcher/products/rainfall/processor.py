@@ -48,8 +48,8 @@ class RainfallProcessor(Processor):
         out = {
             'lat': data.body['coord']['lat'],
             'lon': data.body['coord']['lon'],
-            'rain': data.body.get('rain', None),
-            'wind': data.body.get('wind', None),
+            'rain': data.body.get('rain', {}),
+            'wind': data.body.get('wind', {}),
             'main': dict(filter_main(data.body['main'])),
             'weather': list(map_weather(data.body['weather'])),
             'clouds': data.body['clouds']['all'],

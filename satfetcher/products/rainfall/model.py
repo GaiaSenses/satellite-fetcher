@@ -2,13 +2,13 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class _RainData(BaseModel):
-    one_hour: float = Field(alias='1h')
-    three_hours: float = Field(alias='3h')
+    one_hour: Optional[float] = Field(alias='1h', default=None)
+    three_hours: Optional[float] = Field(alias='3h', default=None)
 
 class _WindData(BaseModel):
-    speed: float
-    deg: float
-    gust: float
+    speed: Optional[float] = None
+    deg: Optional[float] = None
+    gust: Optional[float] = None
 
 class _WeatherData(BaseModel):
     main: str
@@ -20,7 +20,7 @@ class _MainData(BaseModel):
     feels_like: float
     pressure: float
     humidity: float
-    grnd_level: float
+    grnd_level: Optional[float] = None
 
 class RainfallResponse(BaseModel):
     lat: float

@@ -1,9 +1,7 @@
 import os
 import logging
 
-from satfetcher import create_app
-
-app = create_app()
+from satfetcher import app
 
 if __name__ == '__main__':
     from dotenv import load_dotenv

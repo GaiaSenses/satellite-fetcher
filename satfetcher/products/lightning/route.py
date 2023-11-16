@@ -12,9 +12,6 @@ source = GOESSource('GLM-L2-LCFA')
 
 @blueprint.get('/')
 def get():
-    try:
-        params = LightningQueryParams(**request.args)
-        proc = LightningProcessor(source, **params.model_dump())
-        return proc.process().model_dump(by_alias=True)
-    except ValidationError as e:
-        return e.json(include_url=False), 400
+    params = LightningQueryParams(**request.args)
+    proc = LightningProcessor(source, **params.model_dump())
+    return proc.process().model_dump(by_alias=True)

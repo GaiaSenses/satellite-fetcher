@@ -1,3 +1,4 @@
+from satfetcher.errors import InvalidLocation
 from satfetcher.products import sources
 from satfetcher.products.cache import Cache
 
@@ -14,4 +15,8 @@ class Processor:
 
     def get_location(self):
         data = self.geo.get(self.lat, self.lon)
+
+        if not data.body:
+            raise InvalidLocation(self.lat, self.lon)
+
         return data.body[0]
