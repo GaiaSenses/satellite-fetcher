@@ -54,6 +54,7 @@ class RainfallProcessor(Processor):
             'weather': list(map_weather(data.body['weather'])),
             'clouds': data.body['clouds']['all'],
             'visibility': data.body['visibility'],
+            'snow': data.body.get('snow', {}),
             'city': location['name'],
             'state': location['state'],
         }
